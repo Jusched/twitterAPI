@@ -1,6 +1,6 @@
 # Python
 from uuid import UUID
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 # Pydantic 
@@ -38,6 +38,15 @@ class User(BaseModel):
     )
     birth_date: Optional[date] = Field(default=None)
 
-
 class Tweet(BaseModel):
-    pass
+    tweet_id: UUID = Field(...)
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=280
+    )
+    created_at: datetime = Field(default=datetime.now())
+    updated_at: Optional[datetime] = Field(default=None)
+    # It's a User class which has ID, email, first and last name but
+    # No password since it is in the UserLogin class. 
+    by: User = Field(...)
