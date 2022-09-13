@@ -76,7 +76,7 @@ def login(
     pass
 
 ### Show all Users
-@app.post(
+@app.get(
     path="/users",
     response_model=List[User],
     status_code=status.HTTP_200_OK,
@@ -86,7 +86,22 @@ def login(
 def show_users(
 
 ):
-    pass
+    """
+    Show all users registered in the app. 
+
+    Parameters: None
+
+    Returns JSON list with all the users in the app, along with the following keys:
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    - birth_date: date
+    """
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results 
+
 
 # Show a specific User
 # We are obtaining info here
