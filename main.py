@@ -2,12 +2,10 @@
 from typing import List
 
 # Models
-from models import User, UserBase, UserLogin
+from models import User, UserBase, UserLogin, UserRegister, Tweet
 
 # FastAPI
 from fastapi import FastAPI, status
-
-from models.models import Tweet
 
 app = FastAPI()
 
@@ -17,8 +15,7 @@ app = FastAPI()
 ## Users
 
 ### Signup a new User
-# The response is a User since it has everything but the password from 
-# The User
+# The response is a User since it has everything but the password from the User
 @app.post(
     path="/signup",
     response_model=User,
@@ -26,10 +23,22 @@ app = FastAPI()
     summary="Register a new user. ",
     tags=["Users"]
 )
-def signup(
+def signup():
+    """
+    Signs up a new User into the app
 
-):
-    pass
+    Parameters:
+    - Request body parameter
+        - user: UserRegister
+
+    Returns: JSON with the basic user information from the User model:
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    - birth_date: str
+    """
+
 
 ### Login a User
 @app.post(
@@ -79,7 +88,7 @@ def show_user(
     summary="Delete a user. ",
     tags=["Users"]
 )
-def delete_user(
+def delete_user(    
 
 ):
     pass
