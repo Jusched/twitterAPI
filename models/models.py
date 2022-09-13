@@ -24,7 +24,7 @@ class UserLogin(UserBase):
     )
 
 # User is used for other things without requiring the password
-class User(BaseModel):
+class User(UserBase):
 
     first_name: str = Field(
         ...,

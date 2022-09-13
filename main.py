@@ -1,11 +1,12 @@
 # Python
 from typing import List
+import json
 
 # Models
 from models import User, UserBase, UserLogin, UserRegister, Tweet
 
 # FastAPI
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Body
 
 app = FastAPI()
 
@@ -15,6 +16,7 @@ app = FastAPI()
 ## Users
 
 ### Signup a new User
+
 # The response is a User since it has everything but the password from the User
 @app.post(
     path="/signup",
@@ -23,7 +25,9 @@ app = FastAPI()
     summary="Register a new user. ",
     tags=["Users"]
 )
-def signup():
+
+# UserRegister has everything including a password in order to signup. 
+def signup(user: UserRegister = Body(...)):
     """
     Signs up a new User into the app
 
@@ -36,9 +40,27 @@ def signup():
     - email: EmailStr
     - first_name: str
     - last_name: str
-    - birth_date: str
+    - birth_date: date
     """
+    with open ("users.json", "r+", encoding="utf-8") as f:
+    
+    # json.load converts the file into a json or dictionary. 
+    # In this case, a list of dictionaries since there are multiple users and each user is a dictionary. 
+        results = json.loads(f.read())
+    
+    # Create a dictionary based on the request body information. 
+        user_dict = user.dict()
 
+    # We are doing this since both UUID and date can't be converted into dictionaries naturally, it has to be manual with the str function.
+    # From the key "user_id", change it into a str, same for "birth_date" so we have no issues with the json. 
+        user_dict["user_id"] = str(user_dict["user_id"])
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        results.append(user_dict)
+    
+    # This is necessary so we go to the start of the current list instead of creating a new one. 
+        f.seek(0)
+        f.write(json.dumps(results))
+        return user
 
 ### Login a User
 @app.post(
