@@ -56,11 +56,24 @@ def signup(user: UserRegister = Body(...)):
         user_dict["user_id"] = str(user_dict["user_id"])
         user_dict["birth_date"] = str(user_dict["birth_date"])
         results.append(user_dict)
+        if any(users['email'] == user.email for users in results):
+            raise status.HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already exist!"
+        )
     
     # This is necessary so we go to the start of the current list instead of creating a new one. 
         f.seek(0)
         f.write(json.dumps(results))
         return user
+
+    # This code does the same as the one above but better since it has the "default=str" which converts all type of data into strings to avoid conflicts.    
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.load(f)
+        user_dict = user.dict()
+        results.append(user_dict)
+        f.seek(0)
+        json.dump(results,f,default=str,indent=4)
 
 ### Login a User
 @app.post(
@@ -165,10 +178,28 @@ def home():
     summary="Post a new tweet. ",
     tags=["Tweets"]
 )
-def post_tweet(
+def post_tweet(tweet: Tweet = Body(...)):
+    """
+    Posts a tweet in the app
 
-):
-    pass
+    Parameters:
+    - Request body parameters:
+        - tweet: Tweet
+
+    Returns: JSON with the tweet
+    - tweet_id: UUID
+    - content: str
+    - created_at: datetime
+    - updated_at: Optional[datetime]
+    - by: User
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f:
+        results = json.load(f)
+        tweet_dict = tweet.dict()
+        results.append(tweet_dict)
+        f.seek(0)
+        json.dump(results,f, default=str, indent=4)
+        return tweet
 
 ### Show a tweet
 @app.get(

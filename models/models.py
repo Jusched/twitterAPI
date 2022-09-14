@@ -1,5 +1,5 @@
 # Python
-from uuid import UUID
+from uuid import UUID, uuid4
 from datetime import date, datetime
 from typing import Optional
 
@@ -13,7 +13,8 @@ from fastapi import FastAPI
 # Everything inherits from UserBase because it has the minimum requirements
 # To initialize an user. 
 class UserBase(BaseModel):
-    user_id: UUID = Field(...)
+    user_id: UUID = Field(default_factory=uuid4)
+# UUID4 makes it so we don't have the same user_id
     email: EmailStr = Field(...)
 
 class UserLogin(UserBase):
