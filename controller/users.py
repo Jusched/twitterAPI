@@ -43,7 +43,6 @@ def signup(user: UserRegister = Body(...)):
     - email: EmailStr
     - first_name: str
     - last_name: str
-    - birth_date: date
     """
 
     with open("db/users.json", "r+", encoding="utf-8") as f:
@@ -74,11 +73,12 @@ def login(user: UserLogin):
     """
     Logins a user into the app verificating the credentials.
 
-    Parameters: Request body parameter
+    Parameters: 
+    - Request body parameter
         - email: EmailStr
         - password: str
 
-    Returns: JSON confirming the information of the logged user. 
+    Returns: JSON from the User class with the information of the logged user. 
     """
     with open("db/users.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
@@ -118,7 +118,6 @@ def show_all(
     - email: EmailStr
     - first_name: str
     - last_name: str
-    - birth_date: date
     """
     with open("db/users.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
@@ -138,13 +137,33 @@ def show_user(user_id = UUID == Path(
     title="User_ID",
     description="This is the person ID."
 )):
+    """
+    Shows a specific user in the database. 
 
-    with open("db/users.json", "r", encoding="utf-8") as f:
+    Parameters: 
+    - Request body parameter.
+        - user_id: UUID of the user you want to view. 
+
+    Returns: 
+    User JSON with the data from the selected user. 
+    - user: User
+        - user_id: UUID
+        - email: EmailStr
+        - first_name: str
+        - last_name: str
+    """
+    with open("db/users.json", "r+", encoding="utf-8") as f: 
         results = json.loads(f.read())
+        id = str(user_id)
+    for user in results:
+        if user["user_id"] == id:
+            return user
 
-        for acc in range(len(results)):
-            if user_id == results["user_id"]:
-                return results[acc]
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This user ID does not belong to any existing user."
+        )
 
 ### Delete a User
 @router.delete(
@@ -159,6 +178,23 @@ def delete_user(user_id = UUID == Path(
     example=(uuid4())
     )
 ):
+
+    """
+    Delete a user based on its user_id.
+
+    Parameters: 
+    - Request body parameter:
+        - user_id: UUID of the user you want to delete. 
+
+    Returns:
+    
+    User JSON with the deleted data. 
+    - user: User class
+        - user_id: UUID
+        - email: EmailStr
+        - first_name: str
+        - last_name: str
+    """
 
     with open("db/users.json", "r+", encoding="utf-8") as f:
         results = json.load(f)
