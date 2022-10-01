@@ -165,13 +165,17 @@ def delete_user(user_id = UUID == Path(
         user_id = str(user_id)
 
         for id in range(len(results)):
-            if user_id == results["user_id"]:
-                return results.pop[id]
-
+            user = results[id]
+            if user_id == user["user_id"]:
+                results.pop(id)
+                f.truncate(0)
+                f.seek(0)
+                json.dump(results, f, default=str, indent=4)
+                return user
         else:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
-                detail="This user ID doesn't exist."
+                detail="This user ID does not exist."
             )
 
 ### Update a User

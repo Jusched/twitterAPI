@@ -7,30 +7,10 @@
         "password": "12345678"
     },
     {
-        "user_id": "6f9230a3-994d-43cc-8a8a-6b253cdb7fea",
-        "email": "asdadsad@adasdad.com",
-        "first_name": "sdddd",
-        "last_name": "string",
-        "password": "stringst"
-    },
-    {
-        "email": "felipe@example.com",
-        "first_name": "andres",
-        "last_name": "pip",
-        "password": "1234567890"
-    },
-    {
         "user_id": "7973168e-a299-4542-9674-60e1ff5e5a9e",
         "email": "juan@beta.com",
         "first_name": "juan",
         "last_name": "betacur",
         "password": "123456789"
-    },
-    {
-        "user_id": "5d8c8d32-bd99-4ad9-9ca9-1455c6365217",
-        "email": "juan@betan.com",
-        "first_name": "string",
-        "last_name": "string",
-        "password": "stringst"
     }
 ]
