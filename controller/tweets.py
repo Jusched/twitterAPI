@@ -1,12 +1,12 @@
 # Python
 from typing import List
-from uuid import UUID, uuid4
+from uuid import UUID
 
 # Models
 from models.tweets import Tweet
 
 # FastAPI and JSON
-from fastapi import APIRouter, status, Body, Path, HTTPException
+from fastapi import APIRouter, status, Body, Path, Form, HTTPException
 import json
 
 router = APIRouter(
@@ -15,14 +15,12 @@ router = APIRouter(
 )
 
 ## Tweets
-
 ### Show all tweets
 @router.get(
     path="/",
     response_model=List[Tweet],
     status_code=status.HTTP_200_OK,
-    summary="Show all tweets. ",
-    tags=["Tweets"]
+    summary="Show all tweets. "
 )
 def home():
     """
@@ -46,8 +44,7 @@ def home():
     path="/tweets/post",
     response_model=Tweet,
     status_code=status.HTTP_201_CREATED,
-    summary="Post a new tweet. ",
-    tags=["Tweets"]
+    summary="Post a new tweet. "
 )
 def post_tweet(tweet: Tweet = Body(...)):
     """
@@ -56,6 +53,9 @@ def post_tweet(tweet: Tweet = Body(...)):
     Parameters:
     - Request body parameters:
         - tweet: Tweet
+            - content: str
+            - created_at: datetime
+            - updated_at: Optional[datetime]
 
     Returns: JSON with the tweet
     - tweet_id: UUID
@@ -87,15 +87,18 @@ def show_tweet(tweet_id = UUID == Path(
 )):
     """
     Shows a specific tweet in the database. 
+
     Parameters: 
-    - Request body parameter.
-        - tweet_id: UUID of the tweet you want to view. 
+    Path parameter.
+        - tweet_id: UUID
 
     Returns: 
     Tweet JSON with the data from the selected tweet. 
     - tweet: Tweet
         - tweet_id: UUID
         - content: str
+        - created_at: datetime
+        - updated_at: Optional[datetime]
         - by: User
             - user_id: UUID
             - email: EmailStr
@@ -125,15 +128,15 @@ def show_tweet(tweet_id = UUID == Path(
 def delete_tweet(tweet_id = UUID == Path(
         ...,
         title="Tweet ID",
-        example=(uuid4())
-    )
+        example="3fa85f64-5717-4562-b3fc-2c963f66afa8"
+)
 ):
     """
     Delete a tweet based on its tweet_id.
 
     Parameters: 
-    - Request body parameter:
-        - tweet: UUID of the tweet you want to delete. 
+    Path parameter.
+        - tweet_id: UUID
 
     Returns:    
     User JSON with the deleted data. 
@@ -169,11 +172,53 @@ def delete_tweet(tweet_id = UUID == Path(
     path="/tweets/{tweet_id}",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
-    summary="Update a tweet. ",
-    tags=["Tweets"],
-    deprecated=True
+    summary="Update a tweet. "
 )
-def update_tweet( 
-
+def update_tweet(tweet_id = UUID == Path(
+    ...,
+    title="Tweet ID",
+    description="This is the tweet ID. ",
+    example="3fa85f64-5717-4562-b3fc-2c963f66afa8"
+    ),
+    content= str == Form(
+        ...,
+       min_length=1,
+       max_length=280,
+       title="Tweet content. ",
+       description="This is the content of the tweet."
+    )
 ):
-    pass
+    """
+    Update a tweet based on its tweet_id
+
+    Parameters: 
+    Path parameter.
+        - tweet_id: UUID
+    Body parameter.
+        - content = str
+
+    Returns:
+    Tweet JSON with the updated data. 
+    - tweet: Tweet
+    - tweet_id: UUID
+    - content: str
+    - by: User
+        - user_id: UUID
+        - email: EmailStr
+        - first_name: str
+        - last_name: str
+    """
+    with open("db/tweets.json", "r+", encoding="utf-8") as f: 
+        results = json.load(f)
+        for tweet in results:
+            if tweet_id == tweet["tweet_id"]:
+                tweet['content'] = content
+                f.truncate(0)
+                f.seek(0)
+                json.dump(results, f, default=str, indent=4)
+                return tweet
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This tweet ID does not exist. "
+            )

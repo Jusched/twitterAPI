@@ -4,10 +4,9 @@ from uuid import UUID, uuid4
 
 # Models
 from models import User, UserRegister, UserLogin
-from models.users import UserBase
 
 # FastAPI, JSON and Pydantic
-from fastapi import APIRouter, Body, status, HTTPException, Path
+from fastapi import APIRouter, Body, Path, status, HTTPException
 import json
 
 
@@ -74,7 +73,7 @@ def login(user: UserLogin):
     Logins a user into the app verificating the credentials.
 
     Parameters: 
-    - Request body parameter
+    Request body parameter.
         - email: EmailStr
         - password: str
 
@@ -141,8 +140,8 @@ def show_user(user_id = UUID == Path(
     Shows a specific user in the database. 
 
     Parameters: 
-    - Request body parameter.
-        - user_id: UUID of the user you want to view. 
+    Path parameters.
+        - user_id: UUID
 
     Returns: 
     User JSON with the data from the selected user. 
@@ -183,8 +182,8 @@ def delete_user(user_id = UUID == Path(
     Delete a user based on its user_id.
 
     Parameters: 
-    - Request body parameter:
-        - user_id: UUID of the user you want to delete. 
+    Path parameters.
+        - user_id: UUID
 
     Returns:
     User JSON with the deleted data. 
@@ -219,27 +218,52 @@ def delete_user(user_id = UUID == Path(
     path="/users/{user_id}",
     response_model=User,
     status_code=status.HTTP_200_OK,
-    summary="Update a user. ",
-    deprecated=True
-    )
-def update_user(
-    user_id: UUID = Path(
-        ...,
-        title="User ID.",
-        description="User ID of the user.",
-        example="6f9260ag3-9d3d-43dc-8aa8-6b1353b7fea"
-    ),
-    user: UserRegister = Body(...)
-):
-    user_id = str(user_id)
-    user_dict = user.dict()
-    
+    summary="Update a user. "
+)
+def update_tweet(user_id: UUID = Path(
+            ...,
+            title="User ID",
+            description="This is the user ID",
+            example="3fa85f64-5717-4562-b3fc-2c963f66afa3"
+        ),
+        userEd: User = Body(
+            ...,
+            title="Data to update. ",
+            description="Enter the data you need to update. "
+            )
+    ):
+    """
+    Update a user based on its user_id
+
+    Parameters: 
+    Path parameters.
+        - user_id: UUID
+    Body parameters.
+        - user: User
+            - email: EmailStr
+            - first_name: str
+            - last_name: str
+
+    Returns:
+    User JSON with the updated data. 
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    """
     with open("db/users.json", "r+", encoding="utf-8") as f: 
         results = json.load(f)
         for user in results:
-            if user["user_id"] == user_id:
-                results[results.index(user)] = user_dict
-                with open("users.json", "w", encoding="utf-8") as f:
-                    f.seek(0)
-                    json.dump(results, f, default=str, indent=4)
+            if str(user_id) == user["user_id"]:
+                user["email"] = userEd.email
+                user["first_name"] = userEd.first_name
+                user["last_name"] = userEd.last_name
+                f.truncate(0)
+                f.seek(0)
+                json.dump(results, f, default=str, indent=4)
                 return user
+
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This user ID does not exist. "
+            )
