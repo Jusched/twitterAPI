@@ -1,6 +1,6 @@
 # Python
 from typing import List
-from uuid import UUID
+from uuid import UUID, uuid4
 
 # Models
 from models.tweets import Tweet
@@ -120,14 +120,49 @@ def show_tweet(tweet_id = UUID == Path(
     path="/tweets/{tweet_id}",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
-    summary="Delete a tweet. ",
-    tags=["Tweets"],
-    deprecated=True
+    summary="Delete a tweet. "
 )
-def delete_tweet( 
-
+def delete_tweet(tweet_id = UUID == Path(
+        ...,
+        title="Tweet ID",
+        example=(uuid4())
+    )
 ):
-    pass
+    """
+    Delete a tweet based on its tweet_id.
+
+    Parameters: 
+    - Request body parameter:
+        - tweet: UUID of the tweet you want to delete. 
+
+    Returns:    
+    User JSON with the deleted data. 
+    - tweet: Tweet
+        - tweet_id: UUID
+        - content: str
+        - by: User
+            - user_id: UUID
+            - email: EmailStr
+            - first_name: str
+            - last_name: str
+    """
+    with open("db/tweets.json", "r+", encoding="utf-8") as f:
+        results = json.load(f)
+        tweet_id = str(tweet_id)
+
+        for id in range(len(results)):
+            tweet = results[id]
+            if tweet_id == tweet["tweet_id"]:
+                results.pop(id)
+                f.truncate(0)
+                f.seek(0)
+                json.dump(results, f, default=str, indent=4)
+                return tweet
+        else:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                detail="This tweet ID does not exist."
+            )
 
 ### Update a tweet
 @router.put(

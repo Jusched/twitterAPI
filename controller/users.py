@@ -187,7 +187,6 @@ def delete_user(user_id = UUID == Path(
         - user_id: UUID of the user you want to delete. 
 
     Returns:
-    
     User JSON with the deleted data. 
     - user: User class
         - user_id: UUID
