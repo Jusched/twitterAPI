@@ -1,11 +1,12 @@
 # Python
 from typing import List
+from uuid import UUID
 
 # Models
 from models.tweets import Tweet
 
 # FastAPI and JSON
-from fastapi import APIRouter, status, Body
+from fastapi import APIRouter, status, Body, Path, HTTPException
 import json
 
 router = APIRouter(
@@ -68,7 +69,7 @@ def post_tweet(tweet: Tweet = Body(...)):
         tweet_dict = tweet.dict()
         results.append(tweet_dict)
         f.seek(0)
-        json.dump(results,f, default=str, indent=4)
+        json.dump(results, f, default=str, indent=4)
         return tweet
 
 ### Show a tweet
@@ -76,14 +77,43 @@ def post_tweet(tweet: Tweet = Body(...)):
     path="/tweets/{tweet_id}",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
-    summary="Show a tweet. ",
-    tags=["Tweets"],
-    deprecated=True
+    summary="Show a specific tweet"
 )
-def show_tweet( 
 
-):
-    pass
+def show_tweet(tweet_id = UUID == Path(
+    ...,
+    title="Tweet ID",
+    description="This is the tweet ID."
+)):
+    """
+    Shows a specific tweet in the database. 
+    Parameters: 
+    - Request body parameter.
+        - tweet_id: UUID of the tweet you want to view. 
+
+    Returns: 
+    Tweet JSON with the data from the selected tweet. 
+    - tweet: Tweet
+        - tweet_id: UUID
+        - content: str
+        - by: User
+            - user_id: UUID
+            - email: EmailStr
+            - first_name: str
+            - last_name: str
+    """
+    with open("db/tweets.json", "r+", encoding="utf-8") as f: 
+        results = json.loads(f.read())
+        id = str(tweet_id)
+    for tweet in results:
+        if tweet["tweet_id"] == id:
+            return tweet
+
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This tweet ID does not belong to any existing tweet."
+        )
 
 ### Delete a tweet
 @router.delete(

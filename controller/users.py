@@ -222,8 +222,25 @@ def delete_user(user_id = UUID == Path(
     status_code=status.HTTP_200_OK,
     summary="Update a user. ",
     deprecated=True
-)
+    )
 def update_user(
-    
+    user_id: UUID = Path(
+        ...,
+        title="User ID.",
+        description="User ID of the user.",
+        example="6f9260ag3-9d3d-43dc-8aa8-6b1353b7fea"
+    ),
+    user: UserRegister = Body(...)
 ):
-    pass
+    user_id = str(user_id)
+    user_dict = user.dict()
+    
+    with open("db/users.json", "r+", encoding="utf-8") as f: 
+        results = json.load(f)
+        for user in results:
+            if user["user_id"] == user_id:
+                results[results.index(user)] = user_dict
+                with open("users.json", "w", encoding="utf-8") as f:
+                    f.seek(0)
+                    json.dump(results, f, default=str, indent=4)
+                return user

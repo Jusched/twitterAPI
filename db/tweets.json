@@ -1,1 +1,38 @@
-[]
+[
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "The first tweet of the twitter API with FastAPI.",
+        "created_at": "2022-10-01 16:03:46.592380",
+        "updated_at": "2022-10-01 21:04:03.321000+00:00",
+        "by": {
+            "user_id": "6f9230a3-994d-43cc-8a8a-6b253cdb7fea",
+            "email": "seba@betan.com",
+            "first_name": "juan",
+            "last_name": "betan"
+        }
+    },
+    {
+        "tweet_id": "873a8638-e5ec-4d7d-8dfa-5a6e9b19e263",
+        "content": "second tweet on the API. ",
+        "created_at": "2022-10-02 12:59:06.738230",
+        "updated_at": "2022-10-02 18:01:47.842000+00:00",
+        "by": {
+            "user_id": "7973168e-a299-4542-9674-60e1ff5e5a9e",
+            "email": "juan@beta.com",
+            "first_name": "juan",
+            "last_name": "betacur"
+        }
+    },
+    {
+        "tweet_id": "21166fe1-d108-4053-9c2b-173f7f8c41af",
+        "content": "tweet to test delete function. ",
+        "created_at": "2022-10-02 13:06:46.235021",
+        "updated_at": "2022-10-02 18:06:49.775000+00:00",
+        "by": {
+            "user_id": "6f9230a3-994d-43cc-8a8a-6b253cdb7fea",
+            "email": "juan@beta.com",
+            "first_name": "juan",
+            "last_name": "betan"
+        }
+    }
+]
