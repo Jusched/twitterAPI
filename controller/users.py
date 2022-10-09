@@ -5,9 +5,10 @@ from uuid import UUID, uuid4
 # Models
 from models import User, UserRegister, UserLogin
 
-# FastAPI, JSON and Pydantic
+# FastAPI, JSON, Pydantic and Bcrypt
 from fastapi import APIRouter, Body, Path, status, HTTPException
 import json
+import bcrypt
 
 
 router = APIRouter(
@@ -17,7 +18,6 @@ router = APIRouter(
 
 
 ## Users
-
 ### Signup a new User
 
 # The response is a User since it has everything but the password from the User
@@ -47,14 +47,18 @@ def signup(user: UserRegister = Body(...)):
     with open("db/users.json", "r+", encoding="utf-8") as f:
         results = json.load(f)
         user_dict = user.dict()
-        
 
 # Checking if any email is repeated
         if any(users['email'] == user.email for users in results):
             raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Email already exist!")
-                    
+        
+# Process to encrypt the password
+        user.password = user.password.encode("utf-8")
+        salt = bcrypt.gensalt()
+        hashpass = bcrypt.hashpw(user.password,salt)
+        user_dict["password"] = hashpass
         results.append(user_dict)
         f.seek(0)
         json.dump(results, f, default=str, indent=4)
