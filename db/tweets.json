@@ -34,5 +34,27 @@
             "first_name": "juan",
             "last_name": "betan"
         }
+    },
+    {
+        "content": "test datetime",
+        "by": {
+            "email": "seba@betan.com",
+            "first_name": "sebastian",
+            "last_name": "beta"
+        },
+        "tweet_id": "38d96ec1-0b11-4303-ba2e-01d28777cbbf",
+        "created_at": "2022-10-09 19:21:23.983157",
+        "updated_at": "2022-10-09 19:21:23.983162"
+    },
+    {
+        "content": "tst 2 datetime",
+        "by": {
+            "email": "seba@betan.com",
+            "first_name": "sebastian",
+            "last_name": "beta"
+        },
+        "tweet_id": "b4743007-eef3-4a43-89cb-de0cbad5cb72",
+        "created_at": "2022-10-09 19:23:07.406944",
+        "updated_at": "2022-10-09 19:23:07.406944"
     }
 ]

@@ -1,11 +1,7 @@
 from pydantic import BaseModel, Field, EmailStr
-from uuid import UUID, uuid4
-from typing import Any
-
-
 
 class UserBase(BaseModel):
-    user_id: UUID= Field(uuid4())
+    #user_id: UUID= Field(uuid4())
 # UUID4 makes it so we don't have the same user_id
     email: EmailStr = Field(...)
 

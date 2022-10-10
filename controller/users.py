@@ -58,7 +58,8 @@ def signup(user: UserRegister = Body(...)):
         user.password = user.password.encode("utf-8")
         salt = bcrypt.gensalt()
         hashpass = bcrypt.hashpw(user.password,salt)
-        user_dict["password"] = hashpass
+        user_dict["password"] = hashpass.decode()
+        user_dict["user_id"] = uuid4()
         results.append(user_dict)
         f.seek(0)
         json.dump(results, f, default=str, indent=4)
@@ -91,7 +92,11 @@ def login(user: UserLogin):
             cont = results[address]
 
 # If both email and password are correct for the same user in the database, login successful. 
-            if cont["email"] == user.email and cont["password"] == user.password:
+            passwd = str(cont["password"])
+            passwd = passwd.encode("utf-8")
+            hashed = user.password
+            hashed = hashed.encode("utf-8")
+            if cont["email"] == user.email and bcrypt.checkpw(hashed, passwd):
                 return user
         else:
             raise HTTPException(

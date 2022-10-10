@@ -4,20 +4,34 @@
         "email": "seba@betan.com",
         "first_name": "sebastian",
         "last_name": "beta",
-        "password": "b'$2b$12$UlxOkWettTf5iGMcAvbjV.fWqul1dkNjolmbgqbsJyykkeZnasm9m'"
+        "password": "$2b$12$UlxOkWettTf5iGMcAvbjV.fWqul1dkNjolmbgqbsJyykkeZnasm9ms"
     },
     {
         "user_id": "7973168e-a299-4542-9674-60e1ff5e5a9e",
         "email": "juan@beta.com",
         "first_name": "juan",
         "last_name": "betacur",
-        "password": "b'$2b$12$m06eZCUrq6ODrIyuy2BHLeFAPZZrO/fzrEddDP97wTPq2xxbP0eRe'"
+        "password": "$2b$12$m06eZCUrq6ODrIyuy2BHLeFAPZZrO/fzrEddDP97wTPq2xxbP0eRe"
     },
     {
         "user_id": "66b2e12c-5da8-4166-ba2a-0e5a7b734e07",
         "email": "hash@test.com",
         "first_name": "hash",
         "last_name": "salt",
-        "password": "b'$2b$12$x2/6lBWY3i0DZXYCiOPcq.ENmXPJaVTnpGoE6wx78xqy8/m9hnQsq'"
+        "password": "$2b$12$x2/6lBWY3i0DZXYCiOPcq.ENmXPJaVTnpGoE6wx78xqy8/m9hnQsq"
+    },
+    {
+        "user_id": "f818af71-1009-41f5-8520-fa5dd2b60a7b",
+        "email": "test@test.com",
+        "first_name": "test",
+        "last_name": "test",
+        "password": "$2b$12$YsP6UsNPk0D5iakiJGq.luNPcnfVABhE0X0J9M13THEdW1Dfppz4i"
+    },
+    {
+        "email": "test@test1.com",
+        "first_name": "test",
+        "last_name": "test",
+        "password": "$2b$12$mQhhYFioKqqbZ4nntOb1nuzp.qOT2/svSS8DypQ08apwjxIvXKp.a",
+        "user_id": "01de3361-c5cb-4a47-a927-18646df0e4fa"
     }
 ]

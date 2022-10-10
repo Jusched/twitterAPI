@@ -1,6 +1,7 @@
 # Python
 from typing import List
-from uuid import UUID
+from uuid import UUID, uuid4
+from datetime import datetime
 
 # Models
 from models.tweets import Tweet
@@ -54,8 +55,6 @@ def post_tweet(tweet: Tweet = Body(...)):
     - Request body parameters:
         - tweet: Tweet
             - content: str
-            - created_at: datetime
-            - updated_at: Optional[datetime]
 
     Returns: JSON with the tweet
     - tweet_id: UUID
@@ -67,6 +66,9 @@ def post_tweet(tweet: Tweet = Body(...)):
     with open("db/tweets.json", "r+", encoding="utf-8") as f:
         results = json.load(f)
         tweet_dict = tweet.dict()
+        tweet_dict["tweet_id"] = uuid4()
+        tweet_dict["created_at"] = datetime.now()
+        tweet_dict["updated_at"] = tweet_dict["created_at"]
         results.append(tweet_dict)
         f.seek(0)
         json.dump(results, f, default=str, indent=4)
