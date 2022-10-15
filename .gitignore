@@ -1,3 +1,4 @@
 venv/
 basics.md
 __pycache__/
+test.py

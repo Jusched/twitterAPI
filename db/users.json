@@ -33,5 +33,12 @@
         "last_name": "test",
         "password": "$2b$12$mQhhYFioKqqbZ4nntOb1nuzp.qOT2/svSS8DypQ08apwjxIvXKp.a",
         "user_id": "01de3361-c5cb-4a47-a927-18646df0e4fa"
+    },
+    {
+        "email": "user@example.com",
+        "first_name": "string",
+        "last_name": "string",
+        "password": "$2b$12$TqP0Sf3T/73gpTLNWOgAW.8zTgK6l63NgFMs2JuHFX68SEJL.SWOm",
+        "user_id": "dd696ad9-3e24-4a2a-99a8-689575f5af20"
     }
 ]
